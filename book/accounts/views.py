@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 
+from django.contrib.auth import get_user_model
+User= get_user_model()
 # Create your views here.
 def signup_view(request):
     if request.method=='POST':
