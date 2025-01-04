@@ -18,3 +18,15 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+class UploadedFiles(models.Model):
+    book_title=models.CharField( max_length=100)
+    book_description=models.TextField()
+    visibility = models.CharField(max_length=10, choices=[('public', 'Public'), ('private', 'Private')])
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    year_of_published = models.PositiveIntegerField()
+    file_upload = models.FileField(upload_to='news/', null=True, blank=True)
+    def __str__(self):
+        return self.book_title
+
+    

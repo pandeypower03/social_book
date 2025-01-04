@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'current'
+    'current',
 ]
 
 MIDDLEWARE = [
@@ -125,5 +125,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#this has registered my customuser model in my accounts app
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+#to upload books i made this settings media folder included
+MEDIA_ROOT=BASE_DIR /"media"
+MEDIA_URL="/media/"
 

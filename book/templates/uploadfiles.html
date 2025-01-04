@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files</title>
+</head>
+<body>
+    <h1>Upload and Display Files</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Uploaded Information</h2>
+    {% if files %}
+        <ul>
+            {% for file in files %}
+                <li>
+                    <p><strong>Book Title:</strong> {{ file.book_title }}</p>
+                    <p><strong>Description:</strong> {{ file.book_description }}</p>
+                    <p><strong>Visibility:</strong> {{ file.visibility }}</p>
+                    <p><strong>Cost:</strong> {{ file.cost }}</p>
+                    <p><strong>Year of Published:</strong> {{ file.year_of_published }}</p>
+                    
+                    <!-- Check if file_upload exists and provide a download link -->
+                    {% if file.file_upload %}
+                        <a href="{{ file.file_upload.url }}" target="_blank">Download Uploaded File</a>
+                    {% else %}
+                        <p>No file uploaded.</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No files uploaded yet.</p>
+    {% endif %}
+</body>
+</html>

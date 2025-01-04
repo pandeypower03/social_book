@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser,UploadedFiles
 
 # Extend UserAdmin for CustomUser
 class CustomUserAdmin(UserAdmin):
@@ -18,4 +18,10 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ['username', 'email', 'first_name', 'last_name']
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+class UploadedFilesAdmin(admin.ModelAdmin):
+    list_display = ('book_title', 'book_description', 'visibility', 'cost', 'year_of_published', 'file_upload')  # Add the fields you want to display
+    search_fields = ('book_title','book_description', 'visibility', 'cost', 'year_of_published', 'file_upload')  # Optional: Enable searching by book title
+
+admin.site.register(UploadedFiles)
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Uploaded Files</title>
+</head>
+<body>
+    <h2>All Uploaded Files</h2>
+    <ul>
+        {% for file in files %}
+            <li>
+                <strong>Title:</strong> {{ file.book_title }} <br>
+                <strong>Description:</strong> {{ file.book_description }} <br>
+                <strong>Year of Published:</strong> {{ file.year_of_published }} <br>
+                <strong>Visibility:</strong> {{ file.visibility }} <br>
+                <strong>Cost:</strong> {{ file.cost }} <br>
+                <strong>File:</strong> <a href="{{ file.file_upload.url }}" target="_blank">Download</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="{% url 'upload' %}">Go back to Upload</a>
+</body>
+</html>
