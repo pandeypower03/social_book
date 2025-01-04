@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authors and sellers</title>
+</head>
+<body>
+    <h1>Authors and Sellers</h1>
+    <ul>
+    <!--Loops through the users queryset passed from the view-->
+        {% for user in users %}
+        <!--Displays the username and email of each user in the list-->
+        <li>{{ user.username }} - {{ user.email }}</li>
+        <!--ends theloop-->
+        {% endfor %}
+    </ul>
+</body>
+</html>

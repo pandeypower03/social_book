@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
+from .models import CustomUser
 
 from django.contrib.auth import get_user_model
 User= get_user_model()
@@ -27,3 +28,14 @@ def login_view(request):
             return HttpResponse("Invalid credentials! <br> <a href='/signup/'>Signup here</a>")
 
     return render(request, 'login.html')
+
+#logic for rendering authors and sellerspage for user who has opted for public visibility
+
+def authors_and_sellers(request):
+    # Fetch users with public visibility
+    users = CustomUser.objects.filter(public_visibility=True)
+
+    #  Additional filters  sort by username
+    users = users.order_by('username')  
+
+    return render(request, 'authors_and_sellers.html', {'users': users})
