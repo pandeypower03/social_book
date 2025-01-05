@@ -131,4 +131,3 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 #to upload books i made this settings media folder included
 MEDIA_ROOT=BASE_DIR /"media"
 MEDIA_URL="/media/"
-

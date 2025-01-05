@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Files</title>
+    {%load static%}
+        <link rel="stylesheet" href="{% static 'upload.css' %}">
 </head>
 <body>
-    <h1>Upload and Display Files</h1>
+    <h1>DASHBOARD</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
@@ -26,7 +28,7 @@
                     
                     <!-- Check if file_upload exists and provide a download link -->
                     {% if file.file_upload %}
-                        <a href="{{ file.file_upload.url }}" target="_blank">Download Uploaded File</a>
+                        <a href="{{ file.file_upload.url }}" target="_blank">Download </a>
                     {% else %}
                         <p>No file uploaded.</p>
                     {% endif %}
