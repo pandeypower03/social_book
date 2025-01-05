@@ -1,24 +1,24 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from .models import CustomUser
-from django.shortcuts import  redirect
+from django.contrib.auth.decorators import login_required
+from .models import CustomUser, UploadedFiles
 from .forms import UploadedFilesForm
-from .models import UploadedFiles
+from django.urls import reverse
 
-
-
-from django.contrib.auth import get_user_model
-User= get_user_model()
-# Create your views here.
 def signup_view(request):
-    if request.method=='POST':
-        username=request.POST['username']
+    if request.method == 'POST':
+        username = request.POST['username']
         password = request.POST['password']
-        User.objects.create_user(username=username, password=password)
-        return HttpResponse("Signup successful!")
-    return render(request,'home.html')
+
+        # Ensure the user is created correctly
+        try:
+            user = CustomUser.objects.create_user(username=username, password=password)
+            return redirect('login')  # Redirect to login after successful signup
+        except Exception as e:
+            return HttpResponse(f"Error: {e}")  # Show error if there are any issues while creating the user
+
+    return render(request, 'home.html')  # Render the signup page
 
 def login_view(request):
     if request.method == 'POST':
@@ -28,34 +28,34 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return HttpResponse("Login successful!")
+            next_url = request.POST.get('next', reverse('upload_file'))  # Redirect to upload file
+            return redirect(next_url)
         else:
             return HttpResponse("Invalid credentials! <br> <a href='/signup/'>Signup here</a>")
 
     return render(request, 'login.html')
 
-#logic for rendering authors and sellerspage for user who has opted for public visibility
-
 def authors_and_sellers(request):
     # Fetch users with public visibility
     users = CustomUser.objects.filter(public_visibility=True)
-
-    #  Additional filters  sort by username
+    # Additional filters sort by username
     users = users.order_by('username')  
 
     return render(request, 'authors_and_sellers.html', {'users': users})
 
+@login_required
 def upload_file(request):
-    files = UploadedFiles.objects.all()  # Fetch existing files for display
-
+    # Filter files by the current logged-in user
+    files = UploadedFiles.objects.filter(user=request.user)
+    
     if request.method == 'POST':
-        form = UploadedFilesForm(request.POST, request.FILES)  # Include request.FILES for file uploads
+        form = UploadedFilesForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()  # Save the form data to the database
-            # Re-fetch files to include the newly added file
-            files = UploadedFiles.objects.all()
-
+            uploaded_file = form.save(commit=False)  # Don't save the file yet
+            uploaded_file.user = request.user  # Assign the current user to the file
+            uploaded_file.save()  # Now save the file with the user assigned
+            return redirect('upload_file')
     else:
-        form = UploadedFilesForm()  # Display an empty form for GET requests
+        form = UploadedFilesForm()
 
     return render(request, 'uploadfiles.html', {'form': form, 'files': files})
