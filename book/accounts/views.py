@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import CustomUser, UploadedFiles
 from .forms import UploadedFilesForm
 from django.urls import reverse
+from django.contrib.auth import logout
 
 def signup_view(request):
     if request.method == 'POST':
@@ -59,3 +60,7 @@ def upload_file(request):
         form = UploadedFilesForm()
 
     return render(request, 'uploadfiles.html', {'form': form, 'files': files})
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
